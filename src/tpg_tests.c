@@ -295,6 +295,7 @@ static void test_case_for_each_client(uint32_t lcore,
                             src_ip, dst_ip, src_port, dst_port) {
         conn_hash = tlkp_calc_connection_hash(dst_ip, src_ip, dst_port,
                                               src_port);
+        // 按照比例分配每个pkt的连接数
         if (tlkp_get_qindex_from_hash(conn_hash, eth_port) != rx_queue_id)
             continue;
 
@@ -958,9 +959,11 @@ static void test_case_init_state(uint32_t lcore, test_case_init_msg_t *im,
         /* Get local and total session count. Unfortunately there's no other
          * way to compute the number of local sessions than to walk the list..
          */
+        // 计算当前pkt线程下的连接数
         test_case_for_each_client(lcore, im,
                                   test_case_init_state_client_counters_cb,
                                   &local_sessions);
+        //根据配置计算应该生成的总链接数
         total_sessions =
             test_case_client_cfg_count(&im->tcim_test_case.tc_client);
         break;
@@ -980,6 +983,7 @@ static void test_case_init_state(uint32_t lcore, test_case_init_msg_t *im,
     }
 
     /* Initialize the rates. */
+    // 待分析
     test_case_rate_state_init(lcore, im->tcim_test_case.tc_eth_port,
                               im->tcim_test_case.tc_id,
                               ts, rate_timers, im,
@@ -1100,6 +1104,7 @@ test_case_start_tcp_client(uint32_t lcore,
         return;
     }
 
+    //绑定appid到tcb，后面知道调用哪个app 的client/server
     tlkp_init_tcb_client(tcb, src_ip, dst_ip, src_port, dst_port, conn_hash,
                          eth_port, test_case_id,
                          app_id, sockopt,
@@ -1688,6 +1693,7 @@ static int test_case_start_cb(uint16_t msgid, uint16_t lcore, void *msg)
     tc_info->tci_rate_stats->rs_start_time = rte_get_timer_cycles();
 
     /* Start the rate limiting engine. */
+    // 待分析
     test_case_rate_state_start(lcore, sm->tcsm_eth_port, sm->tcsm_test_case_id,
                                &tc_info->tci_state,
                                &tc_info->tci_rate_timers);
@@ -1770,6 +1776,7 @@ static int test_case_run_open_cb(uint16_t msgid, uint16_t lcore __rte_unused,
 
         l4_cb = TAILQ_FIRST(&ts->tos_to_open_cbs);
 
+        // client发起链接
         error = ts->tos_client_open_cb(l4_cb);
         if (unlikely(error)) {
             TEST_NOTIF(TEST_NOTIF_SESS_FAILED, l4_cb);

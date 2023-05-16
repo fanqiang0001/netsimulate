@@ -328,6 +328,7 @@ struct rte_mbuf *udp_receive_pkt(packet_control_block_t *pcb,
             /* Recompute the hash and add the new_tcb to the htable. */
             l4_cb_calc_connection_hash(&new_ucb->ucb_l4);
 
+            // server 接收到client第一个数据时直接创建并添加链接的ucb(此处不同于tcp,tcp要在3次握手期间才添加)
             error = tlkp_add_ucb(new_ucb);
             if (error) {
                 TRACE_FMT(UDP, ERROR, "[%s()] failed to add clone ucb: %s(%d).",
@@ -603,6 +604,7 @@ int udp_open_v4_connection(udp_control_block_t **ucb, uint32_t eth_port,
         UDP_NOTIF(TEST_NOTIF_SESS_LISTEN, ucb_p);
     }
 
+    // client主动发起链接时及server监听时的ucb
     rc = tlkp_add_ucb(ucb_p);
     if (rc != 0) {
 

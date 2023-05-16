@@ -179,6 +179,7 @@ int tcp_open_v4_connection(tcp_control_block_t **tcb, uint32_t eth_port,
 
     tsm_initialize_statemachine(tcb_p, active);
 
+    // client主动发起链接时及server监听时的tcb
     rc = tlkp_add_tcb(tcb_p);
     if (rc != 0) {
         if (!tcb_reuse && tcb_p->tcb_malloced)
@@ -552,6 +553,7 @@ struct rte_mbuf *tcp_receive_pkt(packet_control_block_t *pcb,
      * If no existing tcb see if we have a server available that is
      * accepting new requests.
      */
+    //服务端监听到一个客户端连接，查找对应的监听tcb，不带客户端地址
     if (tcb == NULL && (tcp_hdr->tcp_flags & RTE_TCP_SYN_FLAG) != 0) {
         uint32_t tcp_listen_hash;
 

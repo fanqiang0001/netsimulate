@@ -952,6 +952,7 @@ static int test_start_cb(uint16_t msgid, uint16_t lcore __rte_unused, void *msg)
         return -EINVAL;
 
     /* Initialize l3 interfaces and gw. */
+    // 待分析
     for (i = 0; i < pcfg->pc_l3_intfs_count; i++) {
         route_v4_intf_add(start_msg->tssm_eth_port,
                           pcfg->pc_l3_intfs[i].l3i_ip,
@@ -980,6 +981,7 @@ static int test_start_cb(uint16_t msgid, uint16_t lcore __rte_unused, void *msg)
     }
 
     /* Send INIT for all test cases and wait for it to be processed. */
+    // 初始化某个port下所有的test case
     TEST_CASE_FOREACH_START(tenv, i, entry, state) {
 
         tpg_gen_stats_t  *gen_stats;
@@ -1013,6 +1015,7 @@ static int test_start_cb(uint16_t msgid, uint16_t lcore __rte_unused, void *msg)
      * either wait for completion of the test (if async == false) or start
      * the next test too.
      */
+    // 启动该port下第一个case，并通知所有pkt线程开启该case
     tenv->te_test_case_to_start = (tenv->te_test_cases_count > 1);
     tenv->te_test_case_next = test_mgmt_test_case_first(tenv)->tc_id;
     test_start_test_case(start_msg->tssm_eth_port, tenv);

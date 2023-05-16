@@ -1009,6 +1009,7 @@ static void cmd_tests_add_client_parsed(void *parsed_result, struct cmdline *cl,
 
     test_init_defaults(&tc, TEST_CASE_TYPE__CLIENT, pr->port, pr->tcid);
 
+    //设置客户端使用的L4协议，地址端口信息
     if (strncmp(pr->tcp_udp, "tcp", strlen("tcp") + 1) == 0)
         tc.tc_client.cl_l4.l4c_proto = L4_PROTO__TCP;
     else if (strncmp(pr->tcp_udp, "udp", strlen("udp") + 1) == 0)
