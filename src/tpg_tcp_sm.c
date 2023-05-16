@@ -751,6 +751,7 @@ static int tsm_SF_listen(tcp_control_block_t *tcb, tcpEvent_t event,
                 new_tcb->tcb_l4.l4cb_hash = pcb->pcb_hash;
                  */
 
+                 // server 接收到client第一个数据(三次握手期间)时创建链接的ucb
                 error = tlkp_add_tcb(new_tcb);
                 if (error) {
                     TCB_TRACE(tcb, TSM, ERROR, "[%s()] failed to add clone tcb: %s(%d).",
