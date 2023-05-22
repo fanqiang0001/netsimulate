@@ -495,6 +495,7 @@ int test_case_run_msg(uint32_t lcore_id,
 /*****************************************************************************
  * test_case_tmr_cb()
  ****************************************************************************/
+// rate中slot，每次slot间隔的时间到了就调用，slot中存储的是这次open/close/send的数目，整个slots数组需要在1秒内处理完
 static void test_case_tmr_cb(struct rte_timer *tmr __rte_unused, void *arg)
 {
     test_tmr_arg_t     *tmr_arg = arg;
