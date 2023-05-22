@@ -134,6 +134,7 @@ static void test_sm_SF_client_to_open(l4_control_block_t *l4_cb,
 
         /* Set conn_uptime timer if any. */
         if (!TPG_DELAY_IS_INF(uptime))
+            //uptime不是infinite的情况
             L4CB_TEST_TMR_SET(l4_cb, TPG_DELAY_VAL(uptime) * TPG_SEC_TO_USEC);
 
         /* WARNING: Normally we shouldn't call anything after enter_state

@@ -983,7 +983,6 @@ static void test_case_init_state(uint32_t lcore, test_case_init_msg_t *im,
     }
 
     /* Initialize the rates. */
-    // ´ı·ÖÎö
     test_case_rate_state_init(lcore, im->tcim_test_case.tc_eth_port,
                               im->tcim_test_case.tc_id,
                               ts, rate_timers, im,

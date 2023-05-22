@@ -258,13 +258,13 @@ typedef struct test_state_counter_s {
     uint32_t tos_to_close_cbs; /* In Estab, should close. */
     uint32_t tos_to_send_cbs;  /* In Established, need to send. */
     uint32_t tos_closed_cbs;   /* In Closed, willmove to to_open.*/
-    uint32_t test_states_from_test[TSTS_MAX_STATE];
-    uint32_t test_states_from_tcp[TSTS_MAX_STATE];
-    uint32_t test_states_from_udp[TSTS_MAX_STATE];
-    uint32_t tcp_states_from_test[TS_MAX_STATE];
-    uint32_t udp_states_from_test[US_MAX_STATE];
-    uint32_t tcp_states_from_tcp[TS_MAX_STATE];
-    uint32_t udp_states_from_udp[US_MAX_STATE];
+    uint32_t test_states_from_test[TSTS_MAX_STATE]; //根据测试状态链表统计各个测试状态的session数量
+    uint32_t test_states_from_tcp[TSTS_MAX_STATE]; //根据tcp session链表统计各个测试状态的session数量
+    uint32_t test_states_from_udp[TSTS_MAX_STATE]; //根据udp session链表统计各个测试状态的session数量
+    uint32_t tcp_states_from_test[TS_MAX_STATE]; //根据测试状态链表统计各个tcp状态的session数量
+    uint32_t udp_states_from_test[US_MAX_STATE]; //根据测试状态链表统计各个udp状态的session数量
+    uint32_t tcp_states_from_tcp[TS_MAX_STATE]; //根据tcp session链表统计各个tcp状态的session数量
+    uint32_t udp_states_from_udp[US_MAX_STATE]; //根据udp session链表统计各个udp状态的session数量
 
 } test_state_counter_t;
 
@@ -340,6 +340,7 @@ typedef struct test_oper_state_s {
     /* Rate limiting state. */
     test_rate_state_t tos_rates;
 
+    //各个测试状态的session列表
     tlkp_test_cb_list_t tos_to_init_cbs;  /* In Init, will move to to_open. */
     tlkp_test_cb_list_t tos_to_open_cbs;  /* In Closed, should open. */
     tlkp_test_cb_list_t tos_to_close_cbs; /* In Estab, should close. */
@@ -368,17 +369,21 @@ typedef struct test_oper_latency_state_s {
 /*****************************************************************************
  * Test case info
  ****************************************************************************/
+//每个case test运行中的缓存信息，比如各种统计信息，需要发送的公共数据
 typedef struct test_case_info_s {
 
     /* Operational state */
+    //内部存储需要达到的速率信息rate_limit_t，tpg_rate_t->rate_limit_cfg_t->rate_limit_t
     test_oper_state_t tci_state;
 
     /* Stats */
-    tpg_gen_stats_t  *tci_gen_stats;
-    tpg_rate_stats_t *tci_rate_stats;
-    tpg_app_stats_t  *tci_app_stats;
+    //每个lcore独立的数据
+    tpg_gen_stats_t  *tci_gen_stats; //通用数量统计，比如建立连接数、上线数、下线数、错误数、延迟等
+    tpg_rate_stats_t *tci_rate_stats; //速率统计，比如每秒发送的数量、每秒打开及关闭的数量
+    tpg_app_stats_t  *tci_app_stats; //app层自定义统计
 
     /* A pointer to a copy of the message that configured this test. */
+    //关联用户配置的静态数据tpg_test_case_t
     test_case_init_msg_t *tci_cfg;
 
     /* Shared application storage. */

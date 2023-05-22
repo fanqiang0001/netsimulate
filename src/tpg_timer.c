@@ -486,6 +486,9 @@ void time_advance(void)
 
     now = rte_get_timer_cycles();
 
+    //检测是否有到期的定时器，并触发对应的回调
+
+    //tcp ORPHAN/FIN/TIMEWAIT 断开链接阶段的超时
     if (tcp_time_should_advance(RTE_PER_LCORE(tcp_slow_timer_wheel), now)) {
         tpg_time_wheel_advance(RTE_PER_LCORE(tcp_slow_timer_wheel),
                                tcp_tcb_slow_next,
@@ -493,6 +496,7 @@ void time_advance(void)
                                now);
     }
 
+    //tcp重传超时
     if (tcp_time_should_advance(RTE_PER_LCORE(tcp_rto_timer_wheel), now)) {
         tpg_time_wheel_advance(RTE_PER_LCORE(tcp_rto_timer_wheel),
                                tcp_tcb_rto_next,
@@ -500,6 +504,10 @@ void time_advance(void)
                                now);
     }
 
+    //测试uptime/downtime/initial超时，触发TEST_NOTIF_TMR_FIRED
+    //set tests timeouts port <eth_port> test - case-id <tcid> init <timeout> | infinite
+    //set tests timeouts port <eth_port> test - case-id <tcid> uptime <timeout> | infinite
+    //set tests timeouts port <eth_port> test - case-id <tcid> downtime <timeout> | infinite
     if (tcp_time_should_advance(RTE_PER_LCORE(l4cb_test_timer_wheel), now)) {
         tpg_time_wheel_advance(RTE_PER_LCORE(l4cb_test_timer_wheel),
                                l4cb_test_next,

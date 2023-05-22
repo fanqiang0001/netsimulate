@@ -148,11 +148,13 @@ typedef struct tcp_control_block_s {
     /*
      * TCP slow timer linkage (slow wait/keep-alive/etc.)
      */
+     //挂载时间轮上某个槽链表上的，需要定时器超时通知的session，参见time_advance函数
     tmr_list_entry(tcp_control_block_s) tcb_slow_tmr_entry;
 
     /*
      * TCP retrans timer linkage
      */
+     //挂载时间轮上某个槽链表上的，需要定时器超时通知的session，参见time_advance函数
     tmr_list_entry(tcp_control_block_s) tcb_retrans_tmr_entry;
 
     /*

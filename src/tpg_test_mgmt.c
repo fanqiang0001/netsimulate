@@ -65,9 +65,11 @@
 /*****************************************************************************
  * Globals
  ****************************************************************************/
+//全局静态用户配置数据，命令解析时填充
 /* Array of port: will store the configuration per port. */
 static test_env_t *test_env;
 
+//全局静态统计数据，测试运行时填充
 /* Array of port: will store the runtime stats per port + testcase. */
 tpg_gen_stats_t *test_runtime_gen_stats;
 
@@ -156,6 +158,7 @@ static void test_update_status(tpg_test_case_t *test_case)
         stats_msg->tcsrm_test_case_app_stats = &app_stats;
 
         /* BLOCK waiting for msg to be processed */
+        //收集每个lcore app层及通用统计数据，同步等待方式
         error = msg_send(msgp, 0);
         if (error) {
             TPG_ERROR_ABORT("ERROR: Failed to send stats req msg: %s(%d)!\n",
@@ -185,7 +188,7 @@ static void test_update_status(tpg_test_case_t *test_case)
         ptotal_gen_stats->gs_data_failed += gen_stats.gs_data_failed;
         ptotal_gen_stats->gs_data_null   += gen_stats.gs_data_null;
 
-
+        //汇总app统计数据
         APP_CALL(stats_add, app_id)(ptotal_app_stats, &app_stats);
 
         if (gen_stats.gs_start_time < ptotal_gen_stats->gs_start_time)
@@ -446,6 +449,10 @@ static void test_init_msg(const tpg_test_case_t *entry,
     case TEST_CASE_TYPE__CLIENT:
         msg->tcim_l4_type = entry->tc_client.cl_l4.l4c_proto;
 
+        //根据用户设置填充test_case_init_msg_t中速率字段
+        //set tests rate port <eth_port> test-case-id <tcid> open <rate>|infinite
+        //set tests rate port <eth_port> test-case-id <tcid> close <rate>|infinite
+        //set tests rate port <eth_port> test-case-id <tcid> send <rate>|infinite
         test_init_msg_client_rates(entry, sockopt, msg);
         break;
     case TEST_CASE_TYPE__SERVER:
@@ -642,8 +649,11 @@ static bool test_check_tc_status(tpg_test_case_t *test_case,
     uint64_t now;
 
     now = rte_get_timer_cycles();
+    //更新统计信息
     test_update_status(test_case);
 
+    //检测测试通过标准
+    //set tests criteria port <eth_port> test - case-id <tcid> xxx
     switch (test_case->tc_criteria.tc_crit_type) {
     case TEST_CRIT_TYPE__RUN_TIME:
         *passed = test_check_run_time_tc_status(test_case, state, now);

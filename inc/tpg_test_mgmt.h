@@ -130,6 +130,16 @@ typedef struct test_env_oper_state_s {
 
     struct rte_timer      teos_timer;
     test_env_tmr_arg_t    teos_timer_arg;
+
+    //test case 的运行状态
+    //enum TestCaseState {
+    //    IDLE         = 0;
+    //    RUNNING      = 1;
+    //    PASSED       = 2;
+    //    FAILED       = 3;
+    //    STOPPED      = 4;
+    //    TC_STATE_MAX = 5;
+    //}
     tpg_test_case_state_t teos_test_case_state;
     tpg_test_criteria_t   teos_result;
 
@@ -142,8 +152,10 @@ typedef struct test_env_oper_state_s {
 
 } test_env_oper_state_t;
 
+//用户设置的test case信息
 struct test_env_s {
 
+    //当前port下的公共配置，网卡、网关、vlan
     tpg_port_cfg_t        te_port_cfg;
 
     struct {
@@ -160,6 +172,7 @@ struct test_env_s {
     uint32_t              te_test_case_to_start : 1;
     /* uint32_t           te_unused             : 30; */
 
+    //当前运行的test case 的id
     uint32_t              te_test_case_next;
 
 };

@@ -91,16 +91,19 @@ typedef struct l4_control_block_s {
     /*
      * Lookup hash linkage
      */
+    //保存所有建立的session列表项
     LIST_ENTRY(l4_control_block_s)  l4cb_hash_bucket_entry;
 
     /*
      * TPG tests linkage.
      */
+    //保存不同测试阶段的session列表项，参见test_oper_state_s结构定义的各状态列表
     TAILQ_ENTRY(l4_control_block_s) l4cb_test_list_entry;
 
     /*
      * TPG test timer linkage.
      */
+    //挂载时间轮上某个槽链表上的，需要定时器超时通知的session，参见time_advance函数
     tmr_list_entry(l4_control_block_s) l4cb_test_tmr_entry;
 
     /*

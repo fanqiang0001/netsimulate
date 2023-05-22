@@ -66,6 +66,7 @@
 /*****************************************************************************
  * rate_limit_cfg_init()
  ****************************************************************************/
+//根据tpg_rate_t信息填充rate_limit_cfg_t
 void rate_limit_cfg_init(const tpg_rate_t *target, rate_limit_cfg_t *cfg)
 {
     uint32_t rate;
@@ -133,6 +134,7 @@ void rate_limit_cfg_init(const tpg_rate_t *target, rate_limit_cfg_t *cfg)
 /*****************************************************************************
  * rate_limit_init()
  ****************************************************************************/
+//根据rate_limit_cfg_t中的信息填充到rate_limit_t
 int rate_limit_init(rate_limit_t *rl, rate_limit_cfg_t *cfg,
                     uint32_t lcore_id,
                     uint32_t displacement,
