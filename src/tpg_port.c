@@ -87,7 +87,9 @@ static const char *qmap_default;
  */
 STATS_DEFINE(tpg_port_statistics_t);
 
+//以线程port为索引，元素存储每个port可以让哪些线程进行数据处理，可以处理的线程个数及掩码
 port_port_cfg_t          *port_port_cfg; /* Array of [port] holding the ports core config */
+//以线程id为索引，元素存储每个线程可以处理的port关联的queue id
 port_core_cfg_t          *port_core_cfg; /* Array of [core] holding the q mappings. */
 port_info_t              *port_dev_info; /* Array of [port] holding the port info. */
 

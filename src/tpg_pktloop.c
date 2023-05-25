@@ -71,16 +71,21 @@
  ****************************************************************************/
 
 /* Buffered packets to send (array of tx mbuf pointers per port). */
+//以port为索引的数组，存储该线程关联的待发数据的缓冲区，每个数组元素是一个缓冲区（rte_mbuf *类型数组）
 static RTE_DEFINE_PER_LCORE(struct rte_mbuf ***, pkt_tx_q);
 /* Number of packets buffered for TX (per port). */
+//以port为索引的数组，存储该线程关联的待发数据的缓冲区的长度，每个数组元素对应上面缓冲区的长度
 static RTE_DEFINE_PER_LCORE(uint32_t *, pkt_tx_q_len);
 
 /* Drop one packet at tx every 'pkt_send_simulate_drop_rate' sends. */
 static RTE_DEFINE_PER_LCORE(uint32_t, pkt_send_simulate_drop_rate);
 
 /* Local per packet core port info array indexed by queue idx. */
+//以port为索引的数组，存储该线程关联带处理的port id及queue id
 RTE_DEFINE_PER_LCORE(local_port_info_t *, pktloop_port_info);
+//存储该线程关联pktloop_port_info数组元素的数量
 RTE_DEFINE_PER_LCORE(uint32_t, pktloop_port_count);
+//以port为索引的数组，存储该线程关联的port对应的网卡设备信息（MAC）
 RTE_DEFINE_PER_LCORE(port_info_t *, local_port_dev_info);
 
 /*****************************************************************************

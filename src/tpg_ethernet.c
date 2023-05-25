@@ -383,6 +383,7 @@ struct rte_mbuf *eth_receive_pkt(packet_control_block_t *pcb,
      * Pop all vlan tags to determine protocol type.
      * TODO: we only pass on the inner-most vlan tag right now.
      */
+    // 剔除所有的vlan tag头
     if (unlikely(etype == RTE_ETHER_TYPE_VLAN)) {
 
         INC_STATS(STATS_LOCAL(tpg_eth_statistics_t, pcb->pcb_port),
