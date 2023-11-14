@@ -258,13 +258,13 @@ typedef struct test_state_counter_s {
     uint32_t tos_to_close_cbs; /* In Estab, should close. */
     uint32_t tos_to_send_cbs;  /* In Established, need to send. */
     uint32_t tos_closed_cbs;   /* In Closed, willmove to to_open.*/
-    uint32_t test_states_from_test[TSTS_MAX_STATE]; //根据测试状态链表统计各个测试状态的session数量
-    uint32_t test_states_from_tcp[TSTS_MAX_STATE]; //根据tcp session链表统计各个测试状态的session数量
-    uint32_t test_states_from_udp[TSTS_MAX_STATE]; //根据udp session链表统计各个测试状态的session数量
-    uint32_t tcp_states_from_test[TS_MAX_STATE]; //根据测试状态链表统计各个tcp状态的session数量
-    uint32_t udp_states_from_test[US_MAX_STATE]; //根据测试状态链表统计各个udp状态的session数量
-    uint32_t tcp_states_from_tcp[TS_MAX_STATE]; //根据tcp session链表统计各个tcp状态的session数量
-    uint32_t udp_states_from_udp[US_MAX_STATE]; //根据udp session链表统计各个udp状态的session数量
+    uint32_t test_states_from_test[TSTS_MAX_STATE]; //根据测试状态链表统计各个测试状态的session数量，各个测试状态有多少session
+    uint32_t test_states_from_tcp[TSTS_MAX_STATE]; //根据tcp session链表统计各个测试状态的session数量，各个测试状态有多少tcp session
+    uint32_t test_states_from_udp[TSTS_MAX_STATE]; //根据udp session链表统计各个测试状态的session数量，各个测试状态有多少udp session
+    uint32_t tcp_states_from_test[TS_MAX_STATE]; //根据测试状态链表统计各个tcp状态的session数量，各个tcp状态有多少session
+    uint32_t udp_states_from_test[US_MAX_STATE]; //根据测试状态链表统计各个udp状态的session数量，各个udp状态有多少session
+    uint32_t tcp_states_from_tcp[TS_MAX_STATE]; //根据tcp session链表统计各个tcp状态的session数量，各个tcp状态有多少session
+    uint32_t udp_states_from_udp[US_MAX_STATE]; //根据udp session链表统计各个udp状态的session数量，各个udp状态有多少session
 
 } test_state_counter_t;
 
@@ -338,6 +338,7 @@ typedef struct test_rate_timers_s {
 typedef struct test_oper_state_s {
 
     /* Rate limiting state. */
+    //保存open/close/send速率信息
     test_rate_state_t tos_rates;
 
     //各个测试状态的session列表

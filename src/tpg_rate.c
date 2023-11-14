@@ -66,7 +66,7 @@
 /*****************************************************************************
  * rate_limit_cfg_init()
  ****************************************************************************/
-// 把n个包，尽量均匀的分配到rlc_slots中，每个slot发送m个包
+// 把target->r_value个包，尽量均匀的分配到cfg->rlc_slots中，每个slot发送m个包
 void rate_limit_cfg_init(const tpg_rate_t *target, rate_limit_cfg_t *cfg)
 {
     uint32_t rate;
@@ -210,7 +210,7 @@ void rate_limit_free(rate_limit_t *rl)
 /*****************************************************************************
  * rate_limit_interval_us()
  ****************************************************************************/
-//根据slots数计算1秒定时器触发的间隔时间
+//根据slots数计算1秒内定时器触发的间隔时间
 uint32_t rate_limit_interval_us(rate_limit_t *rl)
 {
     global_config_t *gc;

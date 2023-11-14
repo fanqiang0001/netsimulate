@@ -247,6 +247,7 @@ void tlkp_init_cb(l4_control_block_t *l4_cb, uint32_t local_addr,
     l4_cb->l4cb_interface = cb_interface;
     l4_cb->l4cb_test_case_id = test_case_id;
 
+    //l4cb�д洢appid
     l4_cb->l4cb_app_data.ad_type = app_id;
 
     /* Struct copy! */

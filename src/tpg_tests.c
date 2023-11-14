@@ -511,6 +511,7 @@ static void test_case_tmr_cb(struct rte_timer *tmr __rte_unused, void *arg)
     /* Start from scratch (reset the "reached" flag).. */
     rate_state->trs_flags &= ~reached_flag;
 
+    //将流量任务放queue中，按序调度
     test_resched_runner(rate_state, tmr_arg->tta_eth_port,
                         tmr_arg->tta_test_case_id,
                         in_progress_flag, reached_flag,
@@ -856,6 +857,7 @@ test_case_rate_state_start(uint32_t lcore, uint32_t eth_port,
         .tta_run_msg_type = TRMT_SEND,
     };
 
+    //按照配置的流量速率启动各个定时器
     test_case_rate_start_timer(&rate_timers->trt_open_timer, tmr_open_arg,
                                &rate_state->trs_open,
                                lcore);
@@ -1024,6 +1026,7 @@ test_case_start_tcp_server(uint32_t lcore __rte_unused,
     server_tcb = NULL;
 
     /* Listen on the specified address + port. */
+	//绑定server端appid到tcb，后面知道调用哪个app 的server
     error = tcp_listen_v4(&server_tcb, eth_port, src_ip, src_port,
                           test_case_id,
                           app_id, sockopt,
@@ -1104,7 +1107,7 @@ test_case_start_tcp_client(uint32_t lcore,
         return;
     }
 
-    //绑定appid到tcb，后面知道调用哪个app 的client/server
+    //绑定client端appid到tcb，后面知道调用哪个app 的client
     tlkp_init_tcb_client(tcb, src_ip, dst_ip, src_port, dst_port, conn_hash,
                          eth_port, test_case_id,
                          app_id, sockopt,
@@ -1879,6 +1882,7 @@ static int test_case_run_send_cb(uint16_t msgid, uint16_t lcore __rte_unused,
         app_id = l4_cb->l4cb_app_data.ad_type;
         mtu = ts->tos_session_mtu_cb(l4_cb);
 
+        //调用app层send函数，准备好要发送的数据
         data_mbuf = APP_CALL(send, app_id)(l4_cb, &l4_cb->l4cb_app_data,
                                            tc_info->tci_app_stats,
                                            mtu);
