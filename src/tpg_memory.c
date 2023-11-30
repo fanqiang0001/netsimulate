@@ -62,7 +62,9 @@
 /*****************************************************************************
  * Global variables
  ****************************************************************************/
+ //收发数据时，发送时构建App层数据部分使用，接收时绑定DPDK框架函数rte_eth_rx_queue_setup
 static struct rte_mempool *mbuf_pool[RTE_MAX_LCORE]; /* Indexed by lcore id */
+//发送数据时，构建头使用，构建完成后将头和App层数据部分链接起来（使用rte_mbuf的next）
 static struct rte_mempool *mbuf_pool_tx_hdr[RTE_MAX_LCORE]; /* Indexed by lcore id */
 static struct rte_mempool *mbuf_pool_clone[RTE_MAX_LCORE]; /* Indexed by lcore id */
 static struct rte_mempool *tcb_pool[RTE_MAX_LCORE]; /* Indexed by lcore id */
@@ -71,6 +73,7 @@ static struct rte_mempool *ucb_pool[RTE_MAX_LCORE]; /* Indexed by lcore id */
 /* Global mempool used ONLY at config time.
  * WARNING: Should be used ONLY on the MGMT lcore!
  */
+//MGMT线程调用，用于分配一个数据消息，试算大概需要多少包完成传输
 static struct rte_mempool *mbuf_cfg_pool;
 
 RTE_DEFINE_PER_LCORE(struct rte_mempool *, mbuf_pool);

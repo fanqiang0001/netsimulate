@@ -228,6 +228,7 @@ done:
  *  is fragmented or it has len 0 (mbufs?). Here we try to fix the whole data
  *  into a consistent chain
  ****************************************************************************/
+//删除mbuf链前面len个字节
 static inline
 struct rte_mbuf *data_adj_chain(struct rte_mbuf *mbuf, uint32_t len)
 {

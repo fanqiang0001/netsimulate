@@ -86,7 +86,8 @@ RTE_DEFINE_PER_LCORE(local_port_info_t *, pktloop_port_info);
 //存储该线程关联pktloop_port_info数组元素的数量
 RTE_DEFINE_PER_LCORE(uint32_t, pktloop_port_count);
 //以port为索引的数组，存储该线程关联的port对应的网卡设备信息（MAC）
-RTE_DEFINE_PER_LCORE(port_info_t *, local_port_dev_info);
+//在函数pkt_loop_update_port_dev_info_cb中赋值，数据来源于port_dev_info
+RTE_DEFINE_PER_LCORE(port_info_t*, local_port_dev_info);
 
 /*****************************************************************************
  * pkt_trace_tx()

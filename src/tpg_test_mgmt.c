@@ -399,13 +399,16 @@ static void test_init_msg_client_rates(const tpg_test_case_t *entry,
         uint32_t        pkts_per_send;
         uint32_t        mtu = test_max_pkt_size(entry, sockopt);
         tpg_app_proto_t app_id = entry->tc_app.app_proto;
+        //最小速率单位，一个单位是GCFG_RATE_MIN_RATE_PRECISION
         uint32_t        min_rate_precision = GCFG_RATE_MIN_RATE_PRECISION;
 
+        //一个大的数据消息需要分多个包进行发送
         pkts_per_send = APP_CALL(pkts_per_send, app_id)(entry, &entry->tc_app,
                                                         mtu);
         target_send_rate =
             pkts_per_send * TPG_RATE_VAL(&client_cfg->cl_rates.rc_send_rate);
 
+        //保证是速率单位的整数倍
         if (target_send_rate > min_rate_precision) {
             target_send_rate =
                 target_send_rate / min_rate_precision * min_rate_precision;

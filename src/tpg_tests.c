@@ -1880,6 +1880,7 @@ static int test_case_run_send_cb(uint16_t msgid, uint16_t lcore __rte_unused,
 
         l4_cb = TAILQ_FIRST(&ts->tos_to_send_cbs);
         app_id = l4_cb->l4cb_app_data.ad_type;
+        //减掉L4以下头后的App层最大传输单元
         mtu = ts->tos_session_mtu_cb(l4_cb);
 
         //调用app层send函数，准备好要发送的数据
