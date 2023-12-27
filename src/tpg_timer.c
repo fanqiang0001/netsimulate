@@ -425,12 +425,14 @@ static void tpg_time_wheel_advance(tmr_wheel_t *wheel,
     for (;
             wheel->tw_current != now_idx;
             wheel->tw_current = (wheel->tw_current + 1) % wheel->tw_size) {
+        //遍历此次触发所有桶
         void *current;
 
         /* NO LIST_FOREACH_SAFE available so we do it ourselves.. */
         for (current = wheel->tw_wheel[wheel->tw_current].tlh_first;
                 current != NULL && cnt < GCFG_TMR_MAX_RUN_CNT;
                 /* Advance in the loop */) {
+            //遍历当前桶所有定时器节点
             void *tmp;
 
             tmp = nxt_cb(current);
@@ -486,8 +488,7 @@ void time_advance(void)
 
     now = rte_get_timer_cycles();
 
-    //检测是否有到期的定时器，并触发对应的回调
-
+    //检测每个时间轮是否够一个最小时隙（相对于前一次检测的时间），有到期的定时器就触发对应的回调
     //tcp ORPHAN/FIN/TIMEWAIT 断开链接阶段的超时
     if (tcp_time_should_advance(RTE_PER_LCORE(tcp_slow_timer_wheel), now)) {
         tpg_time_wheel_advance(RTE_PER_LCORE(tcp_slow_timer_wheel),

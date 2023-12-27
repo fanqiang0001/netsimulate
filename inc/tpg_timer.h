@@ -107,13 +107,13 @@ typedef tmr_list_head_t tmr_wheel_bucket_t;
 
 typedef struct tmr_wheel_s {
 
-    uint32_t            tw_size;
+    uint32_t            tw_size; //时间轮的桶数量
 
     /* Step in useconds. */
-    uint32_t            tw_step;
-    uint32_t            tw_current;
+    uint32_t            tw_step; //步长
+    uint32_t            tw_current; //当前所在的桶索引
 
-    uint64_t            tw_last_advance;
+    uint64_t            tw_last_advance; //前一次检测的时间
 
     tmr_wheel_bucket_t *tw_wheel;
 
