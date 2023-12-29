@@ -109,6 +109,7 @@ typedef struct l4_control_block_s {
     /*
      * Test state-machine information
      */
+    //每个session中有一个test状态机状态，表示当前链接测试走到了哪一步
     test_sm_state_t  l4cb_test_state;
 
     /* Physical control block address. If the phys address can't be computed
