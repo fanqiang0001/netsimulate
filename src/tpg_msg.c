@@ -77,8 +77,8 @@
 static msg_handler_t msg_handler_map[MSG_MODULE_MAX][MSG_PER_MODULE_MAX_MSGIDS];
 
 /* Per lcore_index message queues (actually rings). */
-struct rte_ring *msg_queues[RTE_MAX_LCORE] __rte_cache_aligned;
-struct rte_ring *msg_local_queues[RTE_MAX_LCORE] __rte_cache_aligned;
+struct rte_ring *msg_queues[RTE_MAX_LCORE] __rte_cache_aligned; //发送者和接收者是不同core
+struct rte_ring *msg_local_queues[RTE_MAX_LCORE] __rte_cache_aligned; //发送者和接收者是相同core
 
 /* Define MSG global statistics. Each thread has its own set of locally
  * allocated stats which are accessible through STATS_GLOBAL(type, core, port).
