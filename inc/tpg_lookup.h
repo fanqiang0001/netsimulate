@@ -132,6 +132,7 @@ typedef struct l4_control_block_s {
     sockopt_t        l4cb_sockopt;
 
     /* Application level state storage. */
+    //关联应用层的appid
     app_data_t       l4cb_app_data;
 
     /*
