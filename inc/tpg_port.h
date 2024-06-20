@@ -141,7 +141,7 @@ typedef struct port_core_cfg_s {
 typedef struct port_info_s {
 
     struct rte_eth_dev_info pi_dev_info;
-    uint16_t                pi_adjusted_reta_size;
+    uint16_t                pi_adjusted_reta_size; //假设共2个core，该网卡core的分布为1,2,3,1,2,3,1,2,3，pi_adjusted_reta_size为9，相当于hash table的bucket数
     uint16_t                pi_mtu;
     uint16_t                pi_numa_node;
     uint64_t                pi_mac_addr;

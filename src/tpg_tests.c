@@ -295,7 +295,7 @@ static void test_case_for_each_client(uint32_t lcore,
                             src_ip, dst_ip, src_port, dst_port) {
         conn_hash = tlkp_calc_connection_hash(dst_ip, src_ip, dst_port,
                                               src_port);
-        // 按照比例分配每个pkt的连接数
+        // 计算4元组hash之后分配的core/queueid
         if (tlkp_get_qindex_from_hash(conn_hash, eth_port) != rx_queue_id)
             continue;
 
@@ -962,11 +962,11 @@ static void test_case_init_state(uint32_t lcore, test_case_init_msg_t *im,
         /* Get local and total session count. Unfortunately there's no other
          * way to compute the number of local sessions than to walk the list..
          */
-        // 计算当前pkt线程下的连接数
+        // 计算当前pkt线程下的4元组数
         test_case_for_each_client(lcore, im,
                                   test_case_init_state_client_counters_cb,
                                   &local_sessions);
-        //根据配置计算应该生成的总链接数
+        //根据配置计算可以生成的总的4元组数，后面根据local_sessions/total_sessions可以得到该core比重，再通过实际配置的新建数 X 比重得到实际新建数
         total_sessions =
             test_case_client_cfg_count(&im->tcim_test_case.tc_client);
         break;
