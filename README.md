@@ -1308,3 +1308,56 @@ CONTRIBUTORS files.
 
 WARP17 is released under BSD 3-Clause license.
 The license file can be found [here](./LICENSE).
+
+
+主要代码分析
+cli运行在主线程
+主线程解析命令行到start tests port <port>时的流程
+1.(#cli)tpg_test_mgmt_cli::cmd_tests_start_parsed->test_mgmt_start_port->send thread msg
+2.(#mgmt)tpg_test_mgmt::(MSG_TEST_MGMT_START_TEST,test_start_cb)->test_init_test_case(send MSG_TEST_CASE_INIT #pkt),test_start_test_case(send MSG_TEST_CASE_START #pkt)
+3.(#pkt)tpg_tests::(MSG_TEST_CASE_INIT,test_case_init_cb)->test_case_init_state->test_case_rate_state_init,APP_CALL(tc_start,stats_init),test_case_for_each_client/test_case_for_each_server
+4.(#pkt)tpg_tests::(MSG_TEST_CASE_START,test_case_start_cb)->test_case_rate_state_start,设置case启动标记
+
+命令解析都是在cli线程处理的，数据存储在全局变量中，如下
+/* Array of port: will store the configuration per port. */
+static test_env_t *test_env;
+
+每个port对应多个case
+每个case运行在多个pkt lcore上
+
+/*
+ * Test state-machine information
+ */
+test_sm_state_t  l4_control_block_s::l4cb_test_state;
+
+tpg_rate_t->rate_limit_cfg_t->rate_limit_t
+
+app_storage_t 存放指针数据，所有session共用
+l4_control_block_t
+	app_data_t
+		app_storage_t
+		
+test_case_info_t
+	app_storage_t
+
+查看网卡中断号
+cat /proc/interrupts |grep xxx
+
+查看网卡中断号绑定的cpu
+root@ubuntu:/home# cat /proc/irq/56/smp_affinity
+00000000,00000000,00000000,00000001
+
+直观方式查看网卡中断号绑定的cpu
+ubuntu@ubuntu:~$ cat /proc/irq/56/smp_affinity_list 
+1
+
+修改网卡中断号绑定的cpu
+root@ubuntu:/home# echo 00000001> /proc/irq/56/smp_affinity
+
+modprobe uio
+insmod ./dpdk-kmods/linux/igb_uio/igb_uio.ko
+ifconfig eth1  down
+ifconfig eth2  down
+usertools/dpdk-devbind.py -b igb_uio 0000:02:05.0
+usertools/dpdk-devbind.py -b igb_uio 0000:02:06.0
+
