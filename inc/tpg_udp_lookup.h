@@ -73,7 +73,7 @@ typedef LIST_HEAD(tlkp_udp_hash_bucket_s, udp_control_block_s) tlkp_udp_hash_buc
 extern int                  tlkp_add_ucb(udp_control_block_t *ucb);
 extern int                  tlkp_delete_ucb(udp_control_block_t *ucb);
 extern udp_control_block_t *tlkp_find_v4_ucb(uint32_t phys_port, uint32_t l4_hash,
-                                             uint32_t src_addr, uint32_t dst_addr,
+                                             uint32_t src_addr/*±¾µØ£¬Ð¡¶Ë*/, uint32_t dst_addr,
                                              uint16_t src_port, uint16_t dst_port);
 extern void                 tlkp_walk_ucb(uint32_t phys_port,
                                           tlkp_walk_v4_cb_t callback,

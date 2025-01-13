@@ -71,7 +71,7 @@
 extern int                  tlkp_add_tcb(tcp_control_block_t *tcb);
 extern int                  tlkp_delete_tcb(tcp_control_block_t *tcb);
 extern tcp_control_block_t *tlkp_find_v4_tcb(uint32_t phys_port, uint32_t l4_hash,
-                                             uint32_t src_addr, uint32_t dst_addr,
+                                             uint32_t src_addr/*±¾µØ£¬Ð¡¶Ë*/, uint32_t dst_addr,
                                              uint16_t src_port, uint16_t dst_port);
 extern void                 tlkp_walk_tcb(uint32_t phys_port,
                                           tlkp_walk_v4_cb_t callback,

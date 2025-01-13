@@ -166,11 +166,11 @@ typedef LIST_HEAD(tlkp_hash_bucket_s, l4_control_block_s) tlkp_hash_bucket_t;
 /*****************************************************************************
  * Externals for tpg_lookup.c
  ****************************************************************************/
-extern uint32_t tlkp_calc_connection_hash(uint32_t dst_addr,
+extern uint32_t tlkp_calc_connection_hash(uint32_t dst_addr,//对端，小端
                                           uint32_t src_addr,
                                           uint16_t dst_port,
                                           uint16_t src_port);
-extern uint32_t tlkp_calc_pkt_hash(uint32_t local_addr,
+extern uint32_t tlkp_calc_pkt_hash(uint32_t local_addr,//对端，大端
                                    uint32_t remote_addr,
                                    uint16_t local_port,
                                    uint16_t remote_port);
@@ -180,7 +180,7 @@ extern bool tlkp_init(void);
 
 extern l4_control_block_t *tlkp_find_v4_cb(tlkp_hash_bucket_t *htable,
                                            uint32_t phys_port, uint32_t l4_hash,
-                                           uint32_t local_addr, uint32_t remote_addr,
+                                           uint32_t local_addr/*本地，小端*/, uint32_t remote_addr,
                                            uint16_t local_port, uint16_t remote_port);
 
 extern int tlkp_add_cb(tlkp_hash_bucket_t *htable, l4_control_block_t *cb);

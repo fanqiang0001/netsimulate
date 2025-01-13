@@ -91,12 +91,12 @@ typedef struct rate_limit_cfg_s {
 
 typedef struct rate_limit_s {
 
-    uint32_t  rl_current_rate;
-    uint16_t  rl_count;
-    uint16_t  rl_current_index;
+    uint32_t  rl_current_rate; //当前时间片新建数
+    uint16_t  rl_count; //时间片的个数，对应rl_slots数组数量
+    uint16_t  rl_current_index; //当前第几个时间片
     uint16_t  rl_max_burst;
 
-    uint32_t *rl_slots; /* Max GCFG_RATE_MAX_SLOT_COUNT. */
+    uint32_t *rl_slots; /* Max GCFG_RATE_MAX_SLOT_COUNT. */ //存储每个时间片的新建数
 
 } rate_limit_t;
 

@@ -83,7 +83,7 @@
  ****************************************************************************/
 typedef struct port_port_cfg_s {
 
-    uint32_t ppc_q_cnt;
+    uint32_t ppc_q_cnt; //当前port关联了几个core，也就是有多少队列
 
     uint32_t ppc_core_default; /* For sending "non-hashed" traffic (e.g., ARP) */
 
